@@ -234,11 +234,6 @@ async def handle_photo(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 2 - старт', text='Начать')
 async def task_2(callback: types.CallbackQuery, state: FSMContext):
-    await callback.message.answer(
-        'Вам предстоит прослушать аудиозапись, в которой слова звучат наоборот. '
-        'Ваша задача разгадать, какие слова были перевернуты.'
-    )
-
     audio_path = Path(__file__).resolve().parents[1] / 'Наоборот' / 'Наоборот_1.mp3'
 
     with open(audio_path, 'rb') as audio:
