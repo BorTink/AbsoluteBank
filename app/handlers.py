@@ -131,6 +131,7 @@ async def start(message: types.Message, state: FSMContext):
             'взаимопониманию и профессионализму мы достигли результатов, которыми можем гордиться. '
             'Напишите коллеге благодарность за совместную работу в любом мессенджере '
             'и отправьте скриншот сообщения в чат-бот.',
+            await state.set_state('Задание 6 - старт')
         )
     elif entry == 'qr_7':
         await message.answer(
@@ -426,7 +427,7 @@ async def task_5__answer(message: types.Message, state: FSMContext):
             'Ищите следующий QR-код'
         )
 
-    await state.set_state('Задание 4 - окончил')
+    await state.set_state('Задание 5 - окончил')
 
     await final_answer(message, state)
 
