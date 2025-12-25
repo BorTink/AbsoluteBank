@@ -252,6 +252,7 @@ async def start(message: types.Message, state: FSMContext):
 @dp.message_handler(state='Укажите ФИО')
 async def fio(message: types.Message, state: FSMContext):
     fio = message.text
+    await add_info_to_state(state, 'fio', fio)
 
     team = await dal.Teams.get_team_by_name(f"{fio}")
     if team:
@@ -371,6 +372,7 @@ async def task_3__answer(message: types.Message, state: FSMContext):
     for a in right_answers:
         if a in answer:
             increase += increase_amount
+    fio = await get_info_from_state(state, 'fio')
     await dal.Teams.increase_score_by_name(f"{fio}", increase)
 
     if increase == increase_amount * 6:
@@ -410,6 +412,7 @@ async def task_4__answer_1(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
     if answer == 'кабы не было зимы':
         await message.answer('Вы абсолютно правы, это "Кабы не было зимы"! Переходим к следующему вопросу.')
+        fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
     else:
         await message.answer(
@@ -434,6 +437,7 @@ async def task_4__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
     if answer == 'потолок ледяной':
         await message.answer('Вы абсолютно правы, это "Потолок ледяной"! Переходим к следующему вопросу.')
+        fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
     else:
         await message.answer(
@@ -458,6 +462,7 @@ async def task_4__answer_3(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
     if answer == 'три белых коня':
         await message.answer('Вы абсолютно правы, это "Три белых коня"! Ищите следующий QR-код.')
+        fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
     else:
         await message.answer(
@@ -487,6 +492,7 @@ async def task_5__answer(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower()
     if answer == 'чудеса случаются':
         await message.answer('Вы абсолютно правы! Отлично! Ищите следующий QR-код.')
+        fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
     else:
         await message.answer(
@@ -555,6 +561,7 @@ async def task_7__answer__1(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
     if answer == 'А':
         await callback.message.answer('Вы абсолютно правы, это «Испания»! Переходите к следующему вопросу!')
+        fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
     else:
         await callback.message.answer(
@@ -579,6 +586,7 @@ async def task_7__answer__1(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 7 - ожидание - тест 2')
 async def task_7__answer__2(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'В':
         await callback.message.answer('Вы абсолютно правы, это «Число человеческих пороков, '
                                       'от которых нужно очиститься»! Переходите к следующему вопросу!')
@@ -608,6 +616,7 @@ async def task_7__answer__2(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 7 - ожидание - тест 3')
 async def task_7__answer__2(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'Б':
         await callback.message.answer('Вы абсолютно правы, это «Дания»! Ищите следующий QR-код!')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -636,6 +645,7 @@ async def task_8(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state='Задание 8 - аудио 1 - ожидание')
 async def task_8__answer_1(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'чудеса':
         await message.answer('Вы абсолютно правы, это «Чудеса»! Переходим к следующему вопросу.')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -659,6 +669,7 @@ async def task_8__answer_1(message: types.Message, state: FSMContext):
 @dp.message_handler(state='Задание 8 - аудио 2 - ожидание')
 async def task_4__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'праздник':
         await message.answer('Вы абсолютно правы, это «Праздник»! Ищите следующий QR-код!')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -689,6 +700,7 @@ async def task_9(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state='Задание 9 - ожидание')
 async def task_9__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'мандарины':
         await message.answer('Вы абсолютно правы! Отлично! Ищите следующий QR-код.')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -717,6 +729,7 @@ async def task_10(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state='Задание 10 - ожидание')
 async def task_10__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == '6':
         await message.answer('Вы абсолютно правы! Ищите следующий QR-код!')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -758,6 +771,7 @@ async def task_11(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 11 - ожидание - тест 1')
 async def task_11__answer__1(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'А':
         await callback.message.answer('Вы абсолютно правы, это правда! Ищите следующий QR-код!')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -796,6 +810,7 @@ async def task_12(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 12 - ожидание - тест 1')
 async def task_12__answer__1(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'А':
         await callback.message.answer('Вы абсолютно правы, 100 км! Ищите следующий QR-код!')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -822,6 +837,7 @@ async def task_13(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state='Задание 13 - ожидание - тест 1')
 async def task_13__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '').replace(',', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'ирония судьбы или с легким паром':
         await message.answer(
             'Вы абсолютно правы, это «Ирония судьбы, или с легким паром»! Переходим к следующему вопросу.'
@@ -844,6 +860,7 @@ async def task_13__answer_2(message: types.Message, state: FSMContext):
 @dp.message_handler(state='Задание 13 - ожидание - тест 2')
 async def task_13__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'девчата':
         await message.answer(
             'Вы абсолютно правы, это фильм «Девчата»! Ищите следующий QR-код!'
@@ -880,6 +897,7 @@ async def task_14(callback: types.CallbackQuery, state: FSMContext):
 @dp.message_handler(state='Задание 14 - ожидание')
 async def task_14__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'женя трофимов':
         await message.answer(
             'Вы абсолютно правы, это Женя Трофимов и это песня «Поезда»! '
@@ -962,6 +980,7 @@ async def task_12(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 17 - ожидание - тест 1')
 async def task_12__answer__1(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'Б':
         await callback.message.answer('Вы абсолютно правы, 90 минут! Переходим к следующему вопросу.')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -988,6 +1007,7 @@ async def task_12__answer__1(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 17 - ожидание - тест 2')
 async def task_12__answer__2(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'А':
         await callback.message.answer(
             'Вы абсолютно правы, '
@@ -1019,6 +1039,7 @@ async def task_12__answer__2(callback: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state='Задание 17 - ожидание - тест 3')
 async def task_12__answer__3(callback: types.CallbackQuery, state: FSMContext):
     answer = callback.data
+    fio = await get_info_from_state(state, 'fio')
     if answer == 'Б':
         await callback.message.answer(
             'Вы абсолютно правы, до 1957 года линии не имели цветного обозначения. '
