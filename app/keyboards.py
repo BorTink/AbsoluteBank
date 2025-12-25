@@ -28,3 +28,9 @@ variants_second.add(variants_1, variants_2)
 
 variants_third = InlineKeyboardMarkup()
 variants_third.add(variants_1, variants_2).add(variants_3, variants_4)
+
+da = InlineKeyboardMarkup()
+da_1 = InlineKeyboardButton(
+    'Да, все правильно', callback_data='ДА'
+)
+da.add(da_1)

@@ -54,15 +54,19 @@ async def final_answer(message, state):
         count = 0
     if count >= 17:
         message.answer(
-            'Поздравляем Вас с успешным прохождением квеста. Спасибо за участие! '
-            'Забирайте выигранные жетоны у эльфа на информационной стойке в пункте проката.'
+            'Поздравляем! Вы доехали до конечной станции «Новогоднего Экспресса». '
+            'Благодарим за участие, креативность и проявленную смекалку! '
+            'Желаем, чтобы Новый год был таким же ярким, как ваши сегодняшние победы!'
         )
     else:
         await add_info_to_state(state, 'count', count + 1)
 
 
 async def choose_task(user_id, entry, message, state):
-    if entry == 'qr_1':
+    qrs = await get_info_from_state(state, 'qrs')
+    if not qrs:
+        qrs = []
+    if entry not in qrs and entry == 'qr_1':
         await message.answer(
             'Мы приветствуем Вас на станции «Новогодний фото-челлендж». '
             'В этом задании вам понадобятся юмор, креативный подход и смекалка. '
@@ -70,8 +74,10 @@ async def choose_task(user_id, entry, message, state):
             'Готовые фото отправляйте в чат на проверку.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 1 - старт')
-    elif entry == 'qr_2':
+    elif entry not in qrs and entry == 'qr_2':
         await message.answer(
             'Придумайте и напишите в чат короткий новогодний тост или пожелание, используя три обязательных слова:\n'
             'КОМАНДА\n'
@@ -79,32 +85,39 @@ async def choose_task(user_id, entry, message, state):
             'ПРАЗДНИК\n\n'
             'Можете добавить свои слова и эмоции! Креативность приветствуется! '
             'Готовое пожелание отправляйте в чат на проверку.',
-            reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 2 - старт')
-    elif entry == 'qr_3':
+    elif entry not in qrs and entry == 'qr_3':
         await message.answer(
             'В таблице букв найдите 5 слов, связанных с Новым годом! '
             'Слова расположены по горизонтали. Пишите слова с маленькой буквы через запятую.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 3 - старт')
-    elif entry == 'qr_4':
+    elif entry not in qrs and entry == 'qr_4':
         await message.answer(
             'Прослушайте фрагмент новогодней песни (без слов, только мелодия) и угадайте её название. '
             'Необходимо отправить именно название песни в чат! '
             'Желаем Вам удачи на станции музыки!',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 4 - старт')
-    elif entry == 'qr_5':
+    elif entry not in qrs and entry == 'qr_5':
         await message.answer(
             'Мы зашифровали фразу с помощью шифра Цезаря (шаг +1). '
             'Разгадайте фразу и отправьте ее в чат-бот!',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 5 - старт')
-    elif entry == 'qr_6':
+    elif entry not in qrs and entry == 'qr_6':
         await message.answer(
             'Новый год – это время для подведения итогов, время оглянуться назад и оценить пройденный путь. '
             'Это момент, когда особенно важно сказать коллегам тёплые слова благодарности за совместную работу, '
@@ -113,52 +126,68 @@ async def choose_task(user_id, entry, message, state):
             'которыми можем гордиться.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 6 - старт')
-    elif entry == 'qr_7':
+    elif entry not in qrs and entry == 'qr_7':
         await message.answer(
             'Ответьте на 3 вопроса о новогодних традициях разных стран. Отправьте ответы в чат-бот. Желаем Удачи!',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 7 - старт')
-    elif entry == 'qr_8':
+    elif entry not in qrs and entry == 'qr_8':
         await message.answer(
             'Вам предстоит прослушать аудиозапись, в которой слово будет звучать наоборот. '
             'Ваша задача разгадать, какое слово было перевернуто.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 8 - старт')
-    elif entry == 'qr_9':
+    elif entry not in qrs and entry == 'qr_9':
         await message.answer(
             'Разгадайте ребус. Получившееся слово отправьте в чат-бот.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 9 - старт')
-    elif entry == 'qr_10':
+    elif entry not in qrs and entry == 'qr_10':
         await message.answer(
             'Поезда спрятались в зимнем пейзаже. Найдите все составы. В поле для ответа введите одно число.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 10 - старт')
-    elif entry == 'qr_11':
+    elif entry not in qrs and entry == 'qr_11':
         await message.answer(
             'В этом задании вам нужно определить, является ли факт о поездах мифом или правдой.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 11 - старт')
-    elif entry == 'qr_12':
+    elif entry not in qrs and entry == 'qr_12':
         await message.answer(
             'Вспомним школу. Решите логическую задачку про поезда.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 12 - старт')
-    elif entry == 'qr_13':
+    elif entry not in qrs and entry == 'qr_13':
         await message.answer(
             'Все мы любим новогодние фильмы. '
             'Сможете ли вы угадать название фильма, сюжет которого зашифрован с помощью эмодзи?',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 13 - старт')
-    elif entry == 'qr_14':
+    elif entry not in qrs and entry == 'qr_14':
         await message.answer(
             'Перед вами — текст из песни популярного исполнителя, '
             'но его смысл намеренно перевёрнут. '
@@ -166,24 +195,32 @@ async def choose_task(user_id, entry, message, state):
             'Ваша задача назвать исполнителя этой песни в формате имя фамилия.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 14 - старт')
-    elif entry == 'qr_15':
+    elif entry not in qrs and entry == 'qr_15':
         await message.answer(
             'Сделайте фото с коллегой, чье имя начинается на букву «К»'
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 15 - старт')
-    elif entry == 'qr_16':
+    elif entry not in qrs and entry == 'qr_16':
         await message.answer(
             'Сделайте фото с логотипом Capital Group.'
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 16 - старт')
-    elif entry == 'qr_17':
+    elif entry not in qrs and entry == 'qr_17':
         await message.answer(
             'Наш экспресс мчится сквозь зимние чудеса, а иногда мы путешествуем совсем рядом — по московскому метро. '
             'Ведь метро — это тоже поезд, только под землёй!  '
             'Давайте проверим, насколько хорошо вы знаете московское метро.',
             reply_markup=kb.start_first
         )
+        qrs.append(entry)
+        await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 17 - старт')
     else:
         team = await dal.Teams.get_team_by_captain_id(user_id)
@@ -193,12 +230,13 @@ async def choose_task(user_id, entry, message, state):
             await message.answer(
                 'Добро пожаловать на борт «Новогоднего Экспресса»! '
                 'Наш поезд мчит вас сквозь снежные вихри, огни гирлянд и волшебство праздника. '
-                'Ваша задача — пройти все станции-испытания, разгадать. '
-                'Регистрируйтесь, сканируйте первый QR-код — и вперёд, к приключениям!:'
+                'Ваша задача — пройти все станции-испытания. '
+                'Регистрируйтесь, сканируйте первый QR-код — и вперёд, к приключениям!'
             )
             await message.answer(
                 'Укажите ФИО:'
             )
+            qrs.append(entry)
             await state.set_state('Укажите ФИО')
 
 
@@ -251,6 +289,19 @@ async def start(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state='Укажите ФИО')
 async def fio(message: types.Message, state: FSMContext):
+    fio = message.text
+    await add_info_to_state(state, 'fio', fio)
+
+    await message.answer(
+        'Вы точно правильно ввели фио? На всякий случай введите его повторно '
+        '(можете скопировать предыдущее сообщение)',
+        reply_markup=kb.da
+    )
+    await state.set_state('Укажите ФИО - 2')
+
+
+@dp.message_handler(state='Укажите ФИО - 2')
+async def fio_2(message: types.Message, state: FSMContext):
     fio = message.text
     await add_info_to_state(state, 'fio', fio)
 
@@ -323,16 +374,7 @@ async def handle_photo(message: types.Message, state: FSMContext):
 
 # <<---------------------------------------Задание 2----------------------------------------------------------->>
 
-@dp.callback_query_handler(state='Задание 2 - старт', text='Начать')
-async def task_2(callback: types.CallbackQuery, state: FSMContext):
-    await callback.message.answer(
-        'Введите тост'
-    )
-
-    await state.set_state('Задание 2 - ожидание')
-
-
-@dp.message_handler(state='Задание 2 - ожидание')
+@dp.message_handler(state='Задание 2 - старт')
 async def task_2__text(message: types.Message, state: FSMContext):
     team = await dal.Teams.get_team_by_captain_id(message.from_user.id)
     await message.bot.send_message(
@@ -435,7 +477,9 @@ async def task_4__answer_1(message: types.Message, state: FSMContext):
 @dp.message_handler(state='Задание 4 - аудио 2 - ожидание')
 async def task_4__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '')
-    if answer == 'потолок ледяной':
+    right_answers = ['потолок ледяной', 'потолок ледяной дверь скрипучая',
+                     'зима в избушке', 'у леса на опушке']
+    if answer in right_answers:
         await message.answer('Вы абсолютно правы, это "Потолок ледяной"! Переходим к следующему вопросу.')
         fio = await get_info_from_state(state, 'fio')
         await dal.Teams.increase_score_by_name(f"{fio}", 5)
@@ -687,8 +731,6 @@ async def task_4__answer_2(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 9 - старт', text='Начать')
 async def task_9(callback: types.CallbackQuery, state: FSMContext):
-    await callback.message.answer('Прослушайте аудиозапись и назовите слово, которое звучит наоборот')
-
     photo_path = Path(__file__).resolve().parents[1] / 'ребус' / 'ребус_1.jpg'
 
     with open(photo_path, 'rb') as photo:
@@ -797,9 +839,9 @@ async def task_12(callback: types.CallbackQuery, state: FSMContext):
 
     await callback.message.answer(
         'Варианты ответов:\n'
-        'А) 100'
-        'Б) 60'
-        'В) 40'
+        'А) 100\n'
+        'Б) 60\n'
+        'В) 40\n'
         'Г) 120',
         reply_markup=kb.variants_third
     )
@@ -881,14 +923,14 @@ async def task_13__answer_2(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(state='Задание 14 - старт', text='Начать')
 async def task_14(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.answer(
-        '«Не рвутся деревни\n'
+        '"Не рвутся деревни\n'
         'Ты нигде здесь не жил\n'
         'Их мирили самолеты\n'
         'И ссорил их полный аэропорт\n\n'
         'Чтоб расстаться на время\n'
         'Я позже билеты сдал\n'
         'Их мирили самолеты\n'
-        'И ссорил их полный аэропорт'
+        'И ссорил их полный аэропорт"'
     )
 
     await state.set_state('Задание 14 - ожидание')
