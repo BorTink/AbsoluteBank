@@ -263,7 +263,10 @@ async def fio(message: types.Message, state: FSMContext):
         await message.answer(
             f'Отлично, тогда можем начинать! Помните, что проходить задания можно в любом порядке'
         )
-        await state.set_state('Ожидание заданий')
+
+        entry = await get_info_from_state(state, 'qr')
+        user_id = message.from_user.id
+        await choose_task(user_id, entry, message, state)
 
 
 # <<---------------------------------------Задание 1----------------------------------------------------------->>
@@ -271,7 +274,7 @@ async def fio(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 1 - старт', text='Начать')
 async def task_1(callback: types.CallbackQuery, state: FSMContext):
-    photo_path = Path(__file__).resolve().parents[1] / 'Новогодний фоточелендж' / 'фото_1.png'
+    photo_path = Path(__file__).resolve().parents[1] / 'Новогодний фоточелендж' / 'фото_1.png'
 
     with open(photo_path, 'rb') as photo:
         await callback.message.answer_photo(photo)
@@ -285,14 +288,14 @@ async def handle_photo(message: types.Message, state: FSMContext):
     await message.bot.send_photo(
         chat_id=ADMIN_CHAT_ID,
         photo=message.photo[-1].file_id,
-        caption=f'Фото от пользователя {team["team_name"]}'
+        caption=f'ЗАДАНИЕ 1 -- ФОТО 1 -- Фото от пользователя {team["team_name"]}'
     )
 
     await message.answer(
         'Отлично! Переходим к следующей фотографии.'
     )
 
-    photo_path = Path(__file__).resolve().parents[1] / 'Новогодний фоточелендж' / 'фото_2.png'
+    photo_path = Path(__file__).resolve().parents[1] / 'Новогодний фоточелендж' / 'фото_2.png'
 
     with open(photo_path, 'rb') as photo:
         await message.answer_photo(photo)
@@ -306,7 +309,7 @@ async def handle_photo(message: types.Message, state: FSMContext):
     await message.bot.send_photo(
         chat_id=ADMIN_CHAT_ID,
         photo=message.photo[-1].file_id,
-        caption=f'Фото от пользователя {team["team_name"]}'
+        caption=f'ЗАДАНИЕ 1 -- ФОТО 2 -- Фото от пользователя {team["team_name"]}'
     )
 
     await message.answer(
@@ -349,7 +352,7 @@ async def task_2__text(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 3 - старт', text='Начать')
 async def task_3(callback: types.CallbackQuery, state: FSMContext):
-    photo_path = Path(__file__).resolve().parents[1] / 'Найди слова' / 'Найди слова_1.jpg'
+    photo_path = Path(__file__).resolve().parents[1] / 'Найди слова' / 'Найди слова_1.jpg'
 
     with open(photo_path, 'rb') as photo:
         await callback.message.answer_photo(photo)
@@ -380,7 +383,7 @@ async def task_3__answer(message: types.Message, state: FSMContext):
             f'Здесь выделены все спрятанные слова. Ищите следующий QR-код.',
         )
 
-    photo_path = Path(__file__).resolve().parents[1] / 'Найди слова' / 'Найди слова_2.jpg'
+    photo_path = Path(__file__).resolve().parents[1] / 'Найди слова' / 'Найди слова_2.jpg'
 
     with open(photo_path, 'rb') as photo:
         await message.answer_photo(photo)
@@ -394,7 +397,7 @@ async def task_3__answer(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 4 - старт', text='Начать')
 async def task_4(callback: types.CallbackQuery, state: FSMContext):
-    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_1.mp3'
+    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_1.mp3'
 
     with open(audio_path, 'rb') as audio:
         await callback.message.answer_audio(audio)
@@ -418,7 +421,7 @@ async def task_4__answer_1(message: types.Message, state: FSMContext):
         'Прослушайте аудиозапись и назовите слово, которое звучит наоборот'
     )
 
-    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_2.mp3'
+    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_2.mp3'
 
     with open(audio_path, 'rb') as audio:
         await message.answer_audio(audio)
@@ -442,7 +445,7 @@ async def task_4__answer_2(message: types.Message, state: FSMContext):
         'Прослушайте аудиозапись и назовите слово, которое звучит наоборот'
     )
 
-    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_3.mp3'
+    audio_path = Path(__file__).resolve().parents[1] / 'Угадай мелодию' / 'мелодия_3.mp3'
 
     with open(audio_path, 'rb') as audio:
         await message.answer_audio(audio)
@@ -517,7 +520,7 @@ async def task_6__text(message: types.Message, state: FSMContext):
     await message.bot.send_photo(
         chat_id=ADMIN_CHAT_ID,
         photo=message.photo[-1].file_id,
-        caption=f'Фото от пользователя {team}'
+        caption=f'ЗАДАНИЕ 6 -- Фото от пользователя {team["team_name"]}'
     )
 
     await message.answer(
@@ -703,7 +706,7 @@ async def task_9__answer_2(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 10 - старт', text='Начать')
 async def task_10(callback: types.CallbackQuery, state: FSMContext):
-    photo_path = Path(__file__).resolve().parents[1] / 'найди поезд' / 'найди поезд.png'
+    photo_path = Path(__file__).resolve().parents[1] / 'найди поезд' / 'найди поезд.png'
 
     with open(photo_path, 'rb') as photo:
         await callback.message.answer_photo(photo)
@@ -722,7 +725,7 @@ async def task_10__answer_2(message: types.Message, state: FSMContext):
             'К сожалению, это неверный ответ, правильный ответ «6». Ищите следующий QR-код!'
         )
 
-    photo_path = Path(__file__).resolve().parents[1] / 'найди поезд' / 'найди поезд_2.png'
+    photo_path = Path(__file__).resolve().parents[1] / 'найди поезд' / 'найди поезд_2.png'
 
     with open(photo_path, 'rb') as photo:
         await message.answer_photo(photo)
@@ -808,7 +811,7 @@ async def task_12__answer__1(callback: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(state='Задание 13 - старт', text='Начать')
 async def task_13(callback: types.CallbackQuery, state: FSMContext):
-    photo_path = Path(__file__).resolve().parents[1] / 'угадай фильм' / 'Угадай фильм_1.jpg'
+    photo_path = Path(__file__).resolve().parents[1] / 'угадай фильм' / 'Угадай фильм_1.jpg'
 
     with open(photo_path, 'rb') as photo:
         await callback.message.answer_photo(photo)
@@ -830,7 +833,7 @@ async def task_13__answer_2(message: types.Message, state: FSMContext):
             'Переходим к следующему вопросу.'
         )
 
-    photo_path = Path(__file__).resolve().parents[1] / 'угадай фильм' / 'Угадай фильм_2.jpg'
+    photo_path = Path(__file__).resolve().parents[1] / 'угадай фильм' / 'Угадай фильм_2.jpg'
 
     with open(photo_path, 'rb') as photo:
         await message.answer_photo(photo)
@@ -902,7 +905,7 @@ async def task_15__text(message: types.Message, state: FSMContext):
     await message.bot.send_photo(
         chat_id=ADMIN_CHAT_ID,
         photo=message.photo[-1].file_id,
-        caption=f'ЗАДАНИЕ 15 -- Фото от пользователя {team}'
+        caption=f'ЗАДАНИЕ 15 -- Фото от пользователя {team["team_name"]}'
     )
 
     await message.answer(
@@ -922,7 +925,7 @@ async def task_16__text(message: types.Message, state: FSMContext):
     await message.bot.send_photo(
         chat_id=ADMIN_CHAT_ID,
         photo=message.photo[-1].file_id,
-        caption=f'ЗАДАНИЕ 16 -- Фото от пользователя {team}'
+        caption=f'ЗАДАНИЕ 16 -- Фото от пользователя {team["team_name"]}'
     )
 
     await message.answer(
