@@ -7,17 +7,24 @@ start_first_1 = InlineKeyboardButton(
 start_first.add(start_first_1)
 
 
-variants = InlineKeyboardMarkup()
 variants_1 = InlineKeyboardButton(
-    '1', callback_data='1'
+    'А', callback_data='А'
 )
 variants_2 = InlineKeyboardButton(
-    '2', callback_data='2'
+    'Б', callback_data='Б'
 )
 variants_3 = InlineKeyboardButton(
-    '3', callback_data='3'
+    'В', callback_data='В'
 )
 variants_4 = InlineKeyboardButton(
-    '4', callback_data='4'
+    'Г', callback_data='Г'
 )
-variants.add(variants_1, variants_2).add(variants_3, variants_4)
+
+variants = InlineKeyboardMarkup()
+variants.add(variants_1, variants_2, variants_3)
+
+variants_second = InlineKeyboardMarkup()
+variants_second.add(variants_1, variants_2)
+
+variants_third = InlineKeyboardMarkup()
+variants_third.add(variants_1, variants_2).add(variants_3, variants_4)
