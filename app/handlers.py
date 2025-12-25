@@ -15,7 +15,7 @@ import app.keyboards as kb
 load_dotenv()
 bot = Bot(os.getenv('TOKEN'))
 
-ADMIN_CHAT_ID = -5065315574
+ADMIN_CHAT_ID = -5243715700
 
 storage = MemoryStorage()
 dp = Dispatcher(bot=bot, storage=storage)
