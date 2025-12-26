@@ -91,7 +91,7 @@ async def choose_task(user_id, entry, message, state):
         await state.set_state('Задание 2 - старт')
     elif entry not in qrs and entry == 'qr_3':
         await message.answer(
-            'В таблице букв найдите 5 слов, связанных с Новым годом! '
+            'В таблице букв найдите 6 слов, связанных с Новым годом! '
             'Слова расположены по горизонтали. Пишите слова с маленькой буквы через запятую.',
             reply_markup=kb.start_first
         )
@@ -222,6 +222,8 @@ async def choose_task(user_id, entry, message, state):
         qrs.append(entry)
         await add_info_to_state(state, 'qrs', qrs)
         await state.set_state('Задание 17 - старт')
+    elif entry in qrs:
+        await message.answer('Вы уже проходили это задание')
     else:
         team = await dal.Teams.get_team_by_captain_id(user_id)
         if team:
@@ -722,7 +724,7 @@ async def task_4__answer_2(message: types.Message, state: FSMContext):
             'К сожалению, это неверный ответ, правильный ответ «Праздник». Ищите следующий QR-код!'
         )
 
-    await state.set_state('Задание 4 - закончил')
+    await state.set_state('Задание 8 - закончил')
 
     await final_answer(message, state)
 
@@ -880,7 +882,9 @@ async def task_13(callback: types.CallbackQuery, state: FSMContext):
 async def task_13__answer_2(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower().replace('"', '').replace(',', '')
     fio = await get_info_from_state(state, 'fio')
-    if answer == 'ирония судьбы или с легким паром':
+    right_answers = ['ирония судьбы или с легким паром', 'ирония судьбы',
+                     'с легким паром', 'ирония судьбы с легким паром']
+    if answer in right_answers:
         await message.answer(
             'Вы абсолютно правы, это «Ирония судьбы, или с легким паром»! Переходим к следующему вопросу.'
         )
